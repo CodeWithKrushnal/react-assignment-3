@@ -13,14 +13,7 @@ import {
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {Input} from "@/components/ui/input"
 import * as React from "react";
-import {User,Resp} from "./types/types.ts"
-
-const fetchData = async (setData: React.Dispatch<React.SetStateAction<Resp>>, setDisplayData: React.Dispatch<React.SetStateAction<Resp>>) => {
-    const response:Response = await fetch("https://reqres.in/api/users?per_page=12");
-    const json: resp = await response.json();
-    setData(json);
-    setDisplayData(json);
-};
+import {User, Resp} from "./types/types.ts"
 
 function App() {
 
@@ -41,12 +34,18 @@ function App() {
     } as Resp);
 
     useEffect(() => {
+            const fetchData = async (setData: React.Dispatch<React.SetStateAction<Resp>>, setDisplayData: React.Dispatch<React.SetStateAction<Resp>>) => {
+                const response: Response = await fetch("https://reqres.in/api/users?per_page=12");
+                const json: Resp = await response.json();
+                setData(json);
+                setDisplayData(json);
+            };
             fetchData(setData, setDisplayData);
         }, [Table]
     )
 
     // Custom Hook
-    const useSearch  = (event:React.KeyboardEventHandler<HTMLInputElement>): void => {
+    const useSearch = (event: React.KeyboardEventHandler<HTMLInputElement>): void => {
         console.log(event);
         const res = data.data.filter((unit: User): boolean => unit.first_name.toLowerCase().includes(event.target.value.toLowerCase()) || unit.last_name.toLowerCase().includes(event.target.value.toLowerCase()) || unit.email.toLowerCase().includes(event.target.value.toLowerCase()) || unit.id.toString().includes(event.target.value));
         setDisplayData({
